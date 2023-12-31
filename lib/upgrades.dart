@@ -84,6 +84,8 @@ class Upgrade {
       }
 
       if (specialApply != null) specialApply!(state);
+    } else {
+      throw Exception('Cannot apply upgrade $name');
     }
   }
 }

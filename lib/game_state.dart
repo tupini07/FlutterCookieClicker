@@ -1,4 +1,5 @@
 import 'package:flutter_clicker/buildings.dart';
+import 'package:flutter_clicker/upgrades.dart';
 
 class GameState {
   double ticks = 0;
@@ -48,9 +49,18 @@ class GameState {
 
   void buyBuilding(Building building) {
     final buildingCost = building.getCost(this);
-    if (cookies >= BigInt.from(buildingCost)) {
-      cookies -= BigInt.from(buildingCost);
-      buildings[building.type] = buildings[building.type]! + 1;
-    }
+    assert(cookies >= BigInt.from(buildingCost),
+        'Not enough cookies to buy ${building.type}');
+
+    cookies -= BigInt.from(buildingCost);
+    buildings[building.type] = buildings[building.type]! + 1;
+  }
+
+  void buyUpgrade(Upgrade upgrade) {
+    final upgradeCost = upgrade.cost;
+    assert(
+        cookies >= upgrade.cost, 'Not enough cookies to buy ${upgrade.name}');
+
+    upgrade.apply(this);
   }
 }

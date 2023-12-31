@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clicker/buildings.dart';
@@ -60,6 +59,11 @@ class GameStateProvider extends _$GameStateProvider {
     _state.buyBuilding(building);
     _streamController.add(_state);
   }
+
+  buyUpgrade(Upgrade upgrade) {
+    _state.buyUpgrade(upgrade);
+    _streamController.add(_state);
+  }
 }
 
 class FlutterClicker extends ConsumerWidget {
@@ -106,7 +110,7 @@ class FlutterClicker extends ConsumerWidget {
               'Cookies per second: ${state.getCookiesPerSecond()}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Store(),
             ),
@@ -118,6 +122,8 @@ class FlutterClicker extends ConsumerWidget {
 }
 
 class Store extends ConsumerWidget {
+  const Store({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(gameStateProviderProvider).value;
@@ -128,35 +134,68 @@ class Store extends ConsumerWidget {
       );
     }
 
-    return ListView.builder(
-      itemCount: buildingTypeToBuilding.length,
-      itemBuilder: (context, index) {
-        final buildingT = buildingTypeToBuilding.keys.toList()[index];
-        final building = buildingTypeToBuilding[buildingT]!;
+    return Column(children: [
+      // SizedBox(
+      //   height: 200,
+      //   child: ListView.builder(
+      //     scrollDirection: Axis.horizontal,
+      //     itemCount: upgradeTypeToUpgrades.length,
+      //     itemBuilder: (context, index) {
+      //       final upgradeT = upgradeTypeToUpgrades.keys.toList()[index];
+      //       final upgrade = upgradeTypeToUpgrades[upgradeT]!;
 
-        if (!building.canSee(state)) {
-          return const SizedBox
-              .shrink(); // Return an empty widget if the building should not be visible
-        }
+      //       final canBuy = upgrade.canBuy(state);
 
-        final canBuy = state.canBuyBuilding(building);
+      //       return ListTile(
+      //         leading:
+      //             const Icon(Icons.upgrade), // Replace with an appropriate icon
+      //         title: Text(upgrade.name),
+      //         subtitle: Text('Cost: ${upgrade.cost} cookies'),
+      //         trailing: ElevatedButton(
+      //           onPressed: canBuy
+      //               ? () => ref
+      //                   .read(gameStateProviderProvider.notifier)
+      //                   .buyUpgrade(upgrade)
+      //               : null,
+      //           child: const Text('Buy'),
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // ),
+      Expanded(
+        child: ListView.builder(
+          itemCount: buildingTypeToBuilding.length,
+          itemBuilder: (context, index) {
+            final buildingT = buildingTypeToBuilding.keys.toList()[index];
+            final building = buildingTypeToBuilding[buildingT]!;
 
-        return ListTile(
-          leading: const Icon(Icons.home), // Replace with an appropriate icon
-          title: Text(building.name),
-          subtitle: Text(
-              'Cost: ${building.getCost(state)} cookies\nOwned: ${state.buildings[building.type] ?? 0}'),
-          trailing: ElevatedButton(
-            onPressed: canBuy
-                ? () => ref
-                    .read(gameStateProviderProvider.notifier)
-                    .buyBuilding(building)
-                : null,
-            child: const Text('Buy'),
-          ),
-        );
-      },
-    );
+            if (!building.canSee(state)) {
+              return const SizedBox
+                  .shrink(); // Return an empty widget if the building should not be visible
+            }
+
+            final canBuy = state.canBuyBuilding(building);
+
+            return ListTile(
+              leading:
+                  const Icon(Icons.home), // Replace with an appropriate icon
+              title: Text(building.name),
+              subtitle: Text(
+                  'Cost: ${building.getCost(state)} cookies\nOwned: ${state.buildings[building.type] ?? 0}'),
+              trailing: ElevatedButton(
+                onPressed: canBuy
+                    ? () => ref
+                        .read(gameStateProviderProvider.notifier)
+                        .buyBuilding(building)
+                    : null,
+                child: const Text('Buy'),
+              ),
+            );
+          },
+        ),
+      ),
+    ]);
   }
 }
 
