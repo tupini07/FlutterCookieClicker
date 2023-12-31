@@ -33,11 +33,17 @@ jobs:
       - run: flutter --version
       - run: flutter pub get
 
-      - run: flutter build apk
-      - run: flutter build web --release --base-href /${{ github.repository }}/ # Set base URL to match repository name
-      
+      - run: flutter build apk --release
+      - run: flutter build web --release --base-href /FlutterCookieClicker/ # Set base URL to match repository name      
+
       - run: ls -la
       - run: ls -la build
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release-apk-${{ github.run_number }}
+          path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
