@@ -34,7 +34,7 @@ jobs:
       - run: flutter pub get
 
       - run: flutter build apk
-      - run: flutter build web
+      - run: flutter build web --release --base-href /${{ github.repository }}/ # Set base URL to match repository name
       
       - run: ls -la
       - run: ls -la build
