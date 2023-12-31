@@ -6,7 +6,7 @@ part of 'main.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$gameStateProviderHash() => r'bea729bea553823b5fe951673b4fe9ef7cae5be0';
+String _$gameStateProviderHash() => r'914c0d83e202d20b031c9543991fe67c388b98ed';
 
 /// Annotating a class by `@riverpod` defines a new shared state for your application,
 /// accessible using the generated [counterProvider].

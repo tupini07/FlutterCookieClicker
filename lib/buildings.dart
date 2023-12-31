@@ -59,10 +59,6 @@ class Building {
   });
 
   bool canSee(GameState currentState) {
-    if (currentState.cookies < requiredCookies) {
-      return false;
-    }
-
     for (var entry in requiredBuildings.entries) {
       if (currentState.buildings[entry.key] == null ||
           currentState.buildings[entry.key]! < entry.value) {

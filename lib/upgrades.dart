@@ -51,6 +51,20 @@ class Upgrade {
     this.specialApply,
   });
 
+  bool canSee(GameState state) {
+    if (applied) return false;
+
+    for (var entry in requiredBuildings.entries) {
+      if (state.buildings[entry.key]! < entry.value) return false;
+    }
+
+    for (var upgrade in requiredUpgrades) {
+      if (!upgradeTypeToUpgrades[upgrade]!.applied) return false;
+    }
+
+    return true;
+  }
+
   bool canBuy(GameState state) {
     if (applied) return false;
 
